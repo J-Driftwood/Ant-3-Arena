@@ -46,6 +46,7 @@ namespace Ant_3_Arena.Models
             {
                 PositionDelta = new Vector2(PositionDelta.X, -PositionDelta.Y);
             }
+
             Direction = MathHelper.GetAngle(Position, Position + PositionDelta);
         }
 
@@ -62,13 +63,12 @@ namespace Ant_3_Arena.Models
 
         private Bitmap GetColoredBitmap(Color color)
         {
-            var bitmap = new Bitmap(Properties.Resources.Ant);
+            var bitmap = new Bitmap(Resources.Resources.Ant);
             for (int x = 0; x < bitmap.Width; x++)
             {
                 for (int y = 0; y < bitmap.Height; y++)
                 {
                     var pixelColor = bitmap.GetPixel(x, y);
-
                     if (pixelColor == _white)
                     {
                         bitmap.SetPixel(x, y, color);

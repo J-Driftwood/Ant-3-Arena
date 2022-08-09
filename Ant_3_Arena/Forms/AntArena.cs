@@ -1,4 +1,5 @@
 ﻿using Ant_3_Arena.Contracts;
+using Ant_3_Arena.Helpers;
 using Ant_3_Arena.Models;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,6 @@ namespace Ant_3_Arena.Forms
     public partial class AntArena : Form
     {
         internal List<IEntity> Entities = new List<IEntity>();
-        private readonly Random random = new Random();
 
         public AntArena()
         {
@@ -20,20 +20,8 @@ namespace Ant_3_Arena.Forms
 
             for (int i = 0; i < 40; i++)
             {
-                AddRandomAnt();
+                ArenaHelper.AddRandomAnt(ref Entities, ClientSize);
             }
-        }
-
-        private void AddRandomAnt()
-        {
-            const int MaxHexValue = 256;
-
-            var randomColor = Color.FromArgb(random.Next(MaxHexValue), random.Next(MaxHexValue), random.Next(MaxHexValue));
-            var position = new Vector2(random.Next(ClientSize.Width), random.Next(ClientSize.Height));
-            var direction = new Direction(random.Next(360));
-            var speed = random.NextDouble() * 10 + 1;
-
-            Entities.Add(new Ant(randomColor, position, direction, speed));
         }
 
         private void AntArena_Paint(object sender, PaintEventArgs e)
@@ -58,25 +46,30 @@ namespace Ant_3_Arena.Forms
         {
             DoubleBuffered = true;
         }
-
-        private void SetupCanvas()
-        {
-            InitializeComponent();
-            WindowState = FormWindowState.Maximized;
-            BackgroundImage = Properties.Resources.bg;
-            ClientSize = new Size(BackgroundImage.Width, BackgroundImage.Height);
-        }
-
         private void AntArena_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == 'w')
             {
-                AddRandomAnt();
+                ArenaHelper.AddRandomAnt(ref Entities, ClientSize);
             }
             else if (e.KeyChar == 's' && Entities.Any())
             {
                 Entities.RemoveAt(0);
             }
+            else if (e.KeyChar == 'f')
+            {
+                ArenaHelper.AddUniqueWhiteAnt(ref Entities, ClientSize);
+            }
         }
+
+        private void SetupCanvas()
+        {
+            InitializeComponent();
+            WindowState = FormWindowState.Maximized;
+            BackgroundImage = Resources.Resources.bg;
+            ClientSize = new Size(BackgroundImage.Width, BackgroundImage.Height);
+        }
+
+        
     }
 }
