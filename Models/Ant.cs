@@ -4,7 +4,7 @@ using System.Numerics;
 
 namespace Ant_3_Arena.Models
 {
-    internal class Ant
+    internal class Ant : IEntity
     {
         internal Ant(Color color, Vector2 position, Direction direction, double speed = 1)
         {
@@ -18,14 +18,14 @@ namespace Ant_3_Arena.Models
 
         public void Move(Size positionBoundries)
         {
-            AdjustCourse(positionBoundries);
+            ChangePositionDeltaToStayInBoundries(positionBoundries);
 
             Position += PositionDelta;
         }
 
-        private void AdjustCourse(Size positionBoundries)
+        private void ChangePositionDeltaToStayInBoundries(Size positionBoundries)
         {
-            if (((Position.X + Texture.Width) > positionBoundries.Width) || Position.X < 0)
+            if (((Position.X + Texture.Width) > positionBoundries.Width - 20) || Position.X < 0)
             {
                 PositionDelta = new Vector2(-PositionDelta.X, PositionDelta.Y);
             }
@@ -33,6 +33,7 @@ namespace Ant_3_Arena.Models
             {
                 PositionDelta = new Vector2(PositionDelta.X, -PositionDelta.Y);
             }
+            Direction = MathHelper.GetAngle(Position, Position + PositionDelta);
         }
 
         internal double Speed { get; private set; }
@@ -43,7 +44,6 @@ namespace Ant_3_Arena.Models
 
 
         private Vector2 PositionDelta { get; set; }
-
         private readonly Color _white = ColorTranslator.FromHtml("#FFFFFF");
         private readonly int _taskbarHeight = 40;
 
@@ -64,6 +64,18 @@ namespace Ant_3_Arena.Models
             }
 
             return bitmap;
+        }
+
+        public void Render(System.Windows.Forms.PaintEventArgs e)
+        {
+            e.Graphics.TranslateTransform(Position.X + Texture.Width / 2, Position.Y + Texture.Height / 2);
+            e.Graphics.RotateTransform((float)Direction.Degrees + 90);
+            e.Graphics.TranslateTransform(-Position.X + Texture.Width / 2, -Position.Y + Texture.Height / 2);
+
+            e.Graphics.DrawImage(Texture, new Point((int)Position.X - Texture.Width, (int)Position.Y - Texture.Height));
+
+            e.Graphics.ResetTransform();
+            e.Graphics.ResetClip();
         }
     }
 }
