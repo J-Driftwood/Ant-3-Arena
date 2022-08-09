@@ -3,7 +3,6 @@ using Ant_3_Arena.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace Ant_3_Arena.Forms
@@ -72,7 +71,5 @@ namespace Ant_3_Arena.Forms
             BackgroundImage = Resources.Resources.bg;
             ClientSize = new Size(BackgroundImage.Width, BackgroundImage.Height);
         }
-
-
     }
 }
