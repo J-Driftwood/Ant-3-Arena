@@ -10,18 +10,14 @@ namespace Ant_3_Arena
 {
     public partial class AntArena : Form
     {
-        private List<IEntity> Ants = new List<IEntity>();
+        internal List<IEntity> Entities = new List<IEntity>();
         private readonly Random random = new Random();
-
-        const int AmountOfAnts = 40;
-        const int MaxHexValue = 256;
-
 
         public AntArena()
         {
             SetupCanvas();
 
-            for (int i = 0; i < AmountOfAnts; i++)
+            for (int i = 0; i < 40; i++)
             {
                 AddRandomAnt();
             }
@@ -29,27 +25,29 @@ namespace Ant_3_Arena
 
         private void AddRandomAnt()
         {
+            const int MaxHexValue = 256;
+
             var randomColor = Color.FromArgb(random.Next(MaxHexValue), random.Next(MaxHexValue), random.Next(MaxHexValue));
             var position = new Vector2(random.Next(ClientSize.Width), random.Next(ClientSize.Height));
             var direction = new Direction(random.Next(360));
             var speed = random.NextDouble() * 10 + 1;
 
-            Ants.Add(new Ant(randomColor, position, direction, speed));
+            Entities.Add(new Ant(randomColor, position, direction, speed));
         }
 
         private void AntArena_Paint(object sender, PaintEventArgs e)
         {
-            foreach (var ant in Ants)
+            foreach (var entity in Entities)
             {
-                ant.Render(e);
+                entity.Render(e);
             }
         }
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            foreach (var ant in Ants)
+            foreach (var entity in Entities)
             {
-                ant.Move(Size);
+                entity.Move(Size);
             }
 
             Invalidate();
@@ -70,14 +68,13 @@ namespace Ant_3_Arena
 
         private void AntArena_KeyPress(object sender, KeyPressEventArgs e)
         {
-            var t = e.KeyChar;
             if (e.KeyChar == 'w')
             {
                 AddRandomAnt();
             }
-            else if (e.KeyChar == 's' && Ants.Any())
+            else if (e.KeyChar == 's' && Entities.Any())
             {
-                Ants.RemoveAt(0);
+                Entities.RemoveAt(0);
             }
         }
     }

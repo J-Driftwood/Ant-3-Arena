@@ -23,6 +23,18 @@ namespace Ant_3_Arena.Models
             Position += PositionDelta;
         }
 
+        public void Render(System.Windows.Forms.PaintEventArgs e)
+        {
+            e.Graphics.TranslateTransform(Position.X + Texture.Width / 2, Position.Y + Texture.Height / 2);
+            e.Graphics.RotateTransform((float)Direction.Degrees + 90);
+            e.Graphics.TranslateTransform(-Position.X + Texture.Width / 2, -Position.Y + Texture.Height / 2);
+
+            e.Graphics.DrawImage(Texture, new Point((int)Position.X - Texture.Width, (int)Position.Y - Texture.Height));
+
+            e.Graphics.ResetTransform();
+            e.Graphics.ResetClip();
+        }
+
         private void ChangePositionDeltaToStayInBoundries(Size positionBoundries)
         {
             if (((Position.X + Texture.Width) > positionBoundries.Width - 20) || Position.X < 0)
@@ -64,18 +76,6 @@ namespace Ant_3_Arena.Models
             }
 
             return bitmap;
-        }
-
-        public void Render(System.Windows.Forms.PaintEventArgs e)
-        {
-            e.Graphics.TranslateTransform(Position.X + Texture.Width / 2, Position.Y + Texture.Height / 2);
-            e.Graphics.RotateTransform((float)Direction.Degrees + 90);
-            e.Graphics.TranslateTransform(-Position.X + Texture.Width / 2, -Position.Y + Texture.Height / 2);
-
-            e.Graphics.DrawImage(Texture, new Point((int)Position.X - Texture.Width, (int)Position.Y - Texture.Height));
-
-            e.Graphics.ResetTransform();
-            e.Graphics.ResetClip();
         }
     }
 }
