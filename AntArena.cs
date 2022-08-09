@@ -1,67 +1,65 @@
-﻿using Ant_3_Arena.Ants;
+﻿using Ant_3_Arena.Models;
 using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Numerics;
 using System.Windows.Forms;
 
 namespace Ant_3_Arena
 {
-	public partial class AntArena : Form
-	{
-		private AntRed RedAnt;
-		private AntYellow YellowAnt;
-		private AntBlack BlackAnt;
-		private AntRed RedAnt2;
-		private AntYellow YellowAnt2;
-		private AntBlack BlackAnt2;
-		private AntRed RedAnt3;
-		private AntYellow YellowAnt3;
-		private AntBlack BlackAnt3;
-		public AntArena()
-		{
-			InitializeComponent();
-			this.WindowState = FormWindowState.Maximized;
-			this.BackgroundImage = Properties.Resources.bg;
+    public partial class AntArena : Form
+    {
+        private List<Ant> Ants = new List<Ant>();
+        private readonly Random random = new Random();
 
-			RedAnt = new AntRed(this.ClientSize);
-			RedAnt2 = new AntRed(this.ClientSize);
-			RedAnt3 = new AntRed(this.ClientSize);
-			YellowAnt = new AntYellow(this.ClientSize);
-			YellowAnt2 = new AntYellow(this.ClientSize);
-			YellowAnt3 = new AntYellow(this.ClientSize);
-			BlackAnt = new AntBlack(this.ClientSize);
-			BlackAnt2 = new AntBlack(this.ClientSize);
-			BlackAnt3 = new AntBlack(this.ClientSize);
-		}
 
-		private void AntArena_Paint(object sender, PaintEventArgs e)
-		{
-			e.Graphics.DrawImage(RedAnt.AntImage, RedAnt.X, RedAnt.Y, 32, 36);
-			e.Graphics.DrawImage(YellowAnt.AntImage, YellowAnt.X, YellowAnt.Y, 32, 36);
-			e.Graphics.DrawImage(BlackAnt.AntImage, BlackAnt.X, BlackAnt.Y, 32, 36);
-			e.Graphics.DrawImage(RedAnt2.AntImage, RedAnt2.X, RedAnt2.Y, 32, 36);
-			e.Graphics.DrawImage(YellowAnt2.AntImage, YellowAnt2.X, YellowAnt2.Y, 32, 36);
-			e.Graphics.DrawImage(BlackAnt2.AntImage, BlackAnt2.X, BlackAnt2.Y, 32, 36);
-			e.Graphics.DrawImage(RedAnt3.AntImage, RedAnt3.X, RedAnt3.Y, 32, 36);
-			e.Graphics.DrawImage(YellowAnt3.AntImage, YellowAnt3.X, YellowAnt3.Y, 32, 36);
-			e.Graphics.DrawImage(BlackAnt3.AntImage, BlackAnt3.X, BlackAnt3.Y, 32, 36);
-		}
+        const int AmountOfAnts = 40;
+        const int MaxHexValue = 256;
 
-		private void timer1_Tick(object sender, EventArgs e)
-		{
-			RedAnt.Move(this.ClientSize);
-			YellowAnt.Move(this.ClientSize);
-			BlackAnt.Move(this.ClientSize);
-			RedAnt2.Move(this.ClientSize);
-			YellowAnt2.Move(this.ClientSize);
-			BlackAnt2.Move(this.ClientSize);
-			RedAnt3.Move(this.ClientSize);
-			YellowAnt3.Move(this.ClientSize);
-			BlackAnt3.Move(this.ClientSize);
-			Invalidate();
-		}
 
-		private void AntArena_Load(object sender, EventArgs e)
-		{
-			this.DoubleBuffered = true;
-		}
-	}
+        public AntArena()
+        {
+            SetupCanvas();
+            for (int i = 0; i < AmountOfAnts; i++)
+            {
+                var randomColor = Color.FromArgb(random.Next(MaxHexValue), random.Next(MaxHexValue), random.Next(MaxHexValue));
+                var position = new Vector2(random.Next(ClientSize.Width), random.Next(ClientSize.Height));
+                var direction = new Direction(random.Next(360));
+                var speed = random.NextDouble() * 10 + 1;
+
+                Ants.Add(new Ant(randomColor, position, direction, speed));
+            }
+        }
+
+        private void AntArena_Paint(object sender, PaintEventArgs e)
+        {
+            foreach (var ant in Ants)
+            {
+                e.Graphics.DrawImage(ant.Texture, ant.Position.X, ant.Position.Y);
+            }
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            foreach (var ant in Ants)
+            {
+                ant.Move(Size);
+            }
+
+            Invalidate();
+        }
+
+        private void AntArena_Load(object sender, EventArgs e)
+        {
+            this.DoubleBuffered = true;
+        }
+
+        private void SetupCanvas()
+        {
+            InitializeComponent();
+            this.WindowState = FormWindowState.Maximized;
+            this.BackgroundImage = Properties.Resources.bg;
+            this.ClientSize = new Size(BackgroundImage.Width, BackgroundImage.Height);
+        }
+    }
 }
