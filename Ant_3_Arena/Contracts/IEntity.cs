@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace Ant_3_Arena.Models
+namespace Ant_3_Arena.Contracts
 {
     internal interface IEntity
     {

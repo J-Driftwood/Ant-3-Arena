@@ -1,4 +1,4 @@
-﻿namespace Ant_3_Arena
+﻿namespace Ant_3_Arena.Forms
 {
 	partial class AntArena
 	{

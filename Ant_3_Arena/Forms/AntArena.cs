@@ -1,4 +1,5 @@
-﻿using Ant_3_Arena.Models;
+﻿using Ant_3_Arena.Contracts;
+using Ant_3_Arena.Models;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -6,7 +7,7 @@ using System.Linq;
 using System.Numerics;
 using System.Windows.Forms;
 
-namespace Ant_3_Arena
+namespace Ant_3_Arena.Forms
 {
     public partial class AntArena : Form
     {
