@@ -21,6 +21,11 @@
             Degrees = (int)cardinalDirection * 90;
         }
 
+        public static Direction operator +(Direction a, float b)
+        {
+            return new Direction(a.Degrees + b);
+        }
+
         public double Degrees { get; }
     }
 }

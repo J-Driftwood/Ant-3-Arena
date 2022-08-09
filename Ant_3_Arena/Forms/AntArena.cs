@@ -1,11 +1,9 @@
 ﻿using Ant_3_Arena.Contracts;
 using Ant_3_Arena.Helpers;
-using Ant_3_Arena.Models;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Numerics;
 using System.Windows.Forms;
 
 namespace Ant_3_Arena.Forms
@@ -48,17 +46,22 @@ namespace Ant_3_Arena.Forms
         }
         private void AntArena_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (e.KeyChar == 'w')
+            switch (e.KeyChar)
             {
-                ArenaHelper.AddRandomAnt(ref Entities, ClientSize);
-            }
-            else if (e.KeyChar == 's' && Entities.Any())
-            {
-                Entities.RemoveAt(0);
-            }
-            else if (e.KeyChar == 'f')
-            {
-                ArenaHelper.AddUniqueWhiteAnt(ref Entities, ClientSize);
+                case 'c':
+                    Entities.Clear();
+                    break;
+                case '1':
+                    ArenaHelper.AddRandomAnt(ref Entities, ClientSize);
+                    break;
+                case '2':
+                    ArenaHelper.AddUniqueWhiteAnt(ref Entities, ClientSize);
+                    break;
+                case '3':
+                    ArenaHelper.AddRandomEagle(ref Entities, ClientSize);
+                    break;
+                default:
+                    break;
             }
         }
 
@@ -70,6 +73,6 @@ namespace Ant_3_Arena.Forms
             ClientSize = new Size(BackgroundImage.Width, BackgroundImage.Height);
         }
 
-        
+
     }
 }

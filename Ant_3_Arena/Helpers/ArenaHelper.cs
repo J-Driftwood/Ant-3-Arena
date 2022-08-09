@@ -31,5 +31,17 @@ namespace Ant_3_Arena.Helpers
 
             entities.Add(new Ant(Color.White, position, direction, speed));
         }
+
+        internal static void AddRandomEagle(ref List<IEntity> entities, Size clientSize)
+        {
+            const int MaxHexValue = 256;
+
+            var randomColor = Color.FromArgb(random.Next(MaxHexValue), random.Next(MaxHexValue), random.Next(MaxHexValue));
+            var position = new Vector2(random.Next(clientSize.Width - 25) + 25, random.Next(clientSize.Height - 25) + 25);
+            var direction = new Direction(random.Next(360));
+            var speed = random.NextDouble() * 10 + 1;
+
+            entities.Add(new Eagle(randomColor, position, direction, speed));
+        }
     }
 }
